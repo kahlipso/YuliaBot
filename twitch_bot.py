@@ -1,22 +1,23 @@
-from twitchAPI.chat import Chat, EventData, ChatMessage, ChatSub, ChatCommand
+from twitchAPI.chat import Chat, EventData, ChatMessage, ChatCommand
 from twitchAPI.type import AuthScope, ChatEvent
 from twitchAPI.oauth import UserAuthenticator
 from twitchAPI.twitch import Twitch
 import os
-import asyncio, random, requests, json, re, threading
-from spotify import app as flask_app
+import asyncio
+import requests
+import json
+import re
 
-
-APP_ID = os.getenv('TWITCH_APP_ID')#'ls72qs51sxj0p6x2flr86v3808glbf'
-APP_SECRET = os.getenv('TWITCH_APP_SECRET')#'dqcryq0eb8tgo9to0qykepuh1kcag9'
+APP_ID = os.getenv('TWITCH_APP_ID')
+APP_SECRET = os.getenv('TWITCH_APP_SECRET')
 USER_SCOPE = [AuthScope.CHAT_READ, AuthScope.CHAT_EDIT, AuthScope.CHANNEL_MANAGE_BROADCAST]
-target_channel = os.getenv('TWITCH_CHANNELS')#'kahlipso_'
+target_channels = os.getenv('TWITCH_CHANNELS')
 
 async def on_message(msg: ChatMessage):
     print(f'{msg.user.display_name} - {msg.text}')
 
 async def on_ready(ready_event: EventData):
-    await ready_event.chat.join_room(target_channel)
+    await ready_event.chat.join_room(target_channels)
 
 async def song_request(cmd: ChatCommand):
     query = cmd.parameter
@@ -24,18 +25,18 @@ async def song_request(cmd: ChatCommand):
         await cmd.reply("Use this command by entering: !sr <song name>")
         return
     
-    result = request_song_spotify(query)
-    await cmd.reply(result)
-
-def get_spotify_token():
-    with open('spotify_token.json') as f:
-        return json.load(f)['access_token']
-
-def request_song_spotify(query):
-
-    token = get_spotify_token()
+    try:
+        token_response = requests.get('http://localhost:5000/spotify-token')
+        token_data = token_response.json()
+        if not token_data.get('token'):
+            await cmd.reply("Spotify not connected. Please visit /login")
+            return
+        token = token_data['token']
+    except:
+        await cmd.reply("Error connecting to Spotify")
+        return
+    
     headers = {'Authorization': f'Bearer {token}'}
-
     match = re.search(r'(spotify:track:[\w\d]+|open\.spotify\.com/track/([\w\d]+))', query)
 
     if match:
@@ -71,10 +72,6 @@ def request_song_spotify(query):
     else:
         return "Failed to queue this song."
 
-def run_flask():
-    flask_app.run(debug=False, use_reloader=False)
-threading.Thread(target=run_flask, daemon=True).start()
-
 async def run_bot():
     bot = await Twitch(APP_ID, APP_SECRET)
     auth = UserAuthenticator(bot, USER_SCOPE)
@@ -87,7 +84,6 @@ async def run_bot():
     chat.register_event(ChatEvent.MESSAGE, on_message)
 
     chat.register_command('sr', song_request)
-
     chat.start()
-
-asyncio.run(run_bot())
+    
+    
