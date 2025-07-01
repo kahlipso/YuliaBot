@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: twitch-spotify-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: TWITCH_APP_ID
+        value: your_twitch_app_id
+      - key: TWITCH_APP_SECRET
+        value: your_secret
+      - key: SPOTIFY_CLIENT_ID
+        value: your_spotify_client_id
+      - key: SPOTIFY_CLIENT_SECRET
+        value: your_spotify_secret
+      - key: SPOTIFY_REDIRECT_URI
+        value: https://your-app.onrender.com/callback
+      - key: TWITCH_CHANNEL
+        value: yourchannel

@@ -3,16 +3,16 @@ import requests
 import json
 
 from datetime import datetime, timedelta
-from flask import Flask, redirect, request, jsonify, session
+from flask import Flask, redirect, request, jsonify, session, os
 
 
 
 app = Flask(__name__)
 app.secret_key = 'yulia_secret_1230858123'
 
-CLIENT_ID = 'aab78aa660354b16afc3bdacd93755ce'
-CLIENT_SECRET = '43d5d05bfbe44b898e02d34b81b87b20'
-REDIRECT_URI = 'http://127.0.0.1:5000/callback'
+CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID') #'aab78aa660354b16afc3bdacd93755ce'
+CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')#'43d5d05bfbe44b898e02d34b81b87b20'
+REDIRECT_URI = os.getenv('SPOTIFY_REDIRECT_URI')#'http://127.0.0.1:5000/callback'
 
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'

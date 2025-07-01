@@ -3,14 +3,14 @@ from twitchAPI.type import AuthScope, ChatEvent
 from twitchAPI.oauth import UserAuthenticator
 from twitchAPI.twitch import Twitch
 from flask import Flask, redirect, request, jsonify, session
-import asyncio, random, requests, json, re, threading, spotify
+import asyncio, random, requests, json, re, threading, os
 from spotify import app as flask_app
 
 
-APP_ID = 'ls72qs51sxj0p6x2flr86v3808glbf'
-APP_SECRET = 'dqcryq0eb8tgo9to0qykepuh1kcag9'
+APP_ID = os.getenv('TWITCH_APP_ID')#'ls72qs51sxj0p6x2flr86v3808glbf'
+APP_SECRET = os.getenv('TWITCH_APP_SECRET')#'dqcryq0eb8tgo9to0qykepuh1kcag9'
 USER_SCOPE = [AuthScope.CHAT_READ, AuthScope.CHAT_EDIT, AuthScope.CHANNEL_MANAGE_BROADCAST]
-target_channel = 'kahlipso_'
+target_channel = os.getenv('TWITCH_CHANNEL')#'kahlipso_'
 
 async def on_message(msg: ChatMessage):
     print(f'{msg.user.display_name} - {msg.text}')
