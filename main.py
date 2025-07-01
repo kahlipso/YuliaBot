@@ -90,10 +90,4 @@ async def run_bot():
 
     chat.start()
 
-    try:
-        input('PRESS ENTER TO STOP \n')
-    finally:
-        chat.stop()
-        await bot.close()
-
 asyncio.run(run_bot())
