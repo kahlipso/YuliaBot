@@ -8,8 +8,8 @@ import requests
 import json
 import re
 
-APP_ID = 'ls72qs51sxj0p6x2flr86v3808glbf'#os.getenv('TWITCH_APP_ID')
-APP_SECRET = 'dqcryq0eb8tgo9to0qykepuh1kcag9'#os.getenv('TWITCH_APP_SECRET')
+APP_ID = '460aplvoruezqw9phf340m47rixdir'#os.getenv('TWITCH_APP_ID')
+APP_SECRET = 'e8t7fqdonv0bmjn342f7kf2voldp65'#os.getenv('TWITCH_APP_SECRET')
 USER_SCOPE = [AuthScope.CHAT_READ, AuthScope.CHAT_EDIT, AuthScope.CHANNEL_MANAGE_BROADCAST]
 target_channels = 'kahlipso_'#os.getenv('TWITCH_CHANNELS')
 
