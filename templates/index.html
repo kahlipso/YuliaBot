@@ -1,22 +1,42 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>YuliaBot Auth</title>
+    <title>YuliaBot Control</title>
+    <style>
+        #botButton {
+            padding: 10px 20px;
+            background-color: #6441a5; 
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #botButton:hover {
+            background-color: #7d5bbe;
+        }
+    </style>
 </head>
 <body>
-    <h1>Connect Your Accounts</h1>
-    
-        <!-- Replace localhost with your EC2 IP or domain -->
-    <a href="http://35.92.35.77/login" class="connect-button">
-    Connect Spotify
-    </a>
+    <h1>YuliaBot Control Panel</h1>
+    <button id="botButton">Start YuliaBot</button>
 
     <script>
-    // Optional: Verify EC2 is reachable
-    fetch('http://35.92.35.77/spotify-token')
-        .then(response => console.log('EC2 connected!'))
-        .catch(err => console.error('EC2 unreachable:', err));
+        document.getElementById('botButton').addEventListener('click', async () => {
+            try {
+                const response = await fetch('http://35.92.35.77:5000/start-bot', {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    alert('Bot started successfully!');
+                } else {
+                    alert('Failed to start bot');
+                }
+            } catch (error) {
+                alert('Connection error: ' + error.message);
+            }
+        });
     </script>
 </body>
 </html>

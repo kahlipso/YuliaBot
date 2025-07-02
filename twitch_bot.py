@@ -53,15 +53,22 @@ async def song_request(cmd: ChatCommand):
         # Optional: get track metadata to show feedback
         r = requests.get(f'https://api.spotify.com/v1/tracks/{track_id}', headers=headers)
         if r.status_code != 200:
-            return "Failed to find the track info."
-        track_data = r.json()
-        title = track_data['name']
-        artist = track_data['artists'][0]['name']
+            await cmd.reply("Failed to find the track info.")
+            return
+        try:
+            track_data = r.json()
+            title = track_data['name']
+            artist = track_data['artists'][0]['name']
+        except (KeyError, IndexError, json.JSONDecodeError):
+            await cmd.reply("Couldn't parse track information.")
+            return
+
+        r2 = requests.post('https://api.spotify.com/v1/me/player/queue', headers=headers, params={'uri': uri})
 
         if 200 <= r2.status_code < 300:
-            return f"Queued: {title} by {artist}"
+            await cmd.reply(f"Queued: {title} by {artist}")
         else:
-            return "Failed to queue this song."
+            await cmd.reply("Failed to queue this song.")
 
     else:
 
@@ -73,15 +80,16 @@ async def song_request(cmd: ChatCommand):
             uri = res['tracks']['items'][0]['uri']
             title=res['tracks']['items'][0]['name']
             artist = res['tracks']['items'][0]['artists'][0]['name']
-        except (KeyError, IndexError):
-            return "Couldn't find that song."
+        except (KeyError, IndexError, json.JSONDecodeError):
+            await cmd.reply("Couldn't find that song.")
+            return
         
         r2 = requests.post('https://api.spotify.com/v1/me/player/queue', headers=headers, params={'uri': uri})
-
+        
         if 200 <= r2.status_code < 300:
-            return f"Queued: {title} by {artist}"
+            await cmd.reply(f"Queued: {title} by {artist}")
         else:
-            return "Failed to queue this song."
+            await cmd.reply("Failed to queue this song.")
 
 
 
