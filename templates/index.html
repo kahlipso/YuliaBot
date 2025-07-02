@@ -1,0 +1,22 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YuliaBot Auth</title>
+</head>
+<body>
+    <h1>Connect Your Accounts</h1>
+    
+        <!-- Replace localhost with your EC2 IP or domain -->
+    <a href="http://35.92.35.77/login" class="connect-button">
+    Connect Spotify
+    </a>
+
+    <script>
+    // Optional: Verify EC2 is reachable
+    fetch('http://35.92.35.77/spotify-token')
+        .then(response => console.log('EC2 connected!'))
+        .catch(err => console.error('EC2 unreachable:', err));
+    </script>
+</body>
+</html>
