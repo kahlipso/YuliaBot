@@ -3,6 +3,12 @@ from flask_cors import CORS
 from backend.spotify_routes import spotify_bp
 from backend.twitch_routes import twitch_bp
 
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from EC2!!"
+
 def create_app():
     app = Flask(__name__)
     app.secret_key = "yulia_secret_keyy393884712"
