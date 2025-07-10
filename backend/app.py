@@ -14,6 +14,3 @@ def home():
 app.register_blueprint(spotify_bp, url_prefix = "/spotify")
 app.register_blueprint(twitch_bp, url_prefix = "/twitch")
 
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
