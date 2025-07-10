@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect
 from flask_cors import CORS
 from backend.spotify_routes import spotify_bp
 from backend.twitch_routes import twitch_bp
@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "Hello from EC2!!"
+    return redirect("http://www.yuliabot.net.s3-website-us-west-2.amazonaws.com")
 
 def create_app():
     app = Flask(__name__)
